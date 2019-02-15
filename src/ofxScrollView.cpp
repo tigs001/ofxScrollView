@@ -682,9 +682,20 @@ void ofxScrollView::end() {
     ofPopMatrix();
 }
 
-void ofxScrollView::draw() {
-    //
+void ofxScrollView::generateDraw()
+{
+    /*
+     * Same as ofxGuiGroup, but the border
+     * and header, background, and textMesh elements have
+     * been removed until we can work out
+     * how to configure them or if we need them at all.
+     */
 }
+
+
+//void ofxScrollView::draw() {
+//    //
+//}
 
 //--------------------------------------------------------------
 void ofxScrollView::exit() {
@@ -756,35 +767,40 @@ void ofxScrollView::zoomCancel() {
 }
 
 //--------------------------------------------------------------
-void ofxScrollView::mouseMoved(int x, int y) {
+bool ofxScrollView::mouseMoved(int x, int y) {
     //
+    return false;
 }
 
-void ofxScrollView::mousePressed(int x, int y, int button) {
+bool ofxScrollView::mousePressed(int x, int y, int button) {
+    bool bRetval;
+
     if(button == 0) {
         
-        touchDown(x, y, 0);
+        bRetval = touchDown(x, y, 0);
         
     } else if(button == 2) {
         
-        touchDown(x, y, 0);
-        touchDown(x, y, 2);
+        bRetval = touchDown(x, y, 0);
+        bRetval = touchDown(x, y, 2);
     }
+
+    return bRetval;
 }
 
-void ofxScrollView::mouseDragged(int x, int y, int button) {
-    touchMoved(x, y, button);
+bool ofxScrollView::mouseDragged(int x, int y, int button) {
+    return touchMoved(x, y, button);
 }
 
-void ofxScrollView::mouseReleased(int x, int y, int button) {
-    touchUp(x, y, button);
+bool ofxScrollView::mouseReleased(int x, int y, int button) {
+    return touchUp(x, y, button);
 }
 
 //--------------------------------------------------------------
-void ofxScrollView::touchDown(int x, int y, int id) {
+bool ofxScrollView::touchDown(int x, int y, int id) {
     bool bHit = windowRect.inside(x, y);
     if(bHit == false) {
-        return;
+        return false;
     }
 
     ofxScrollViewTouchPoint touchPointNew;
@@ -813,13 +829,13 @@ void ofxScrollView::touchDown(int x, int y, int id) {
         touchDownPointLast.touchDownTimeInSec = 0.0;
         
         touchDoubleTap(x, y, id);
-        return;
+        return true;
     }
     
     //----------------------------------------------------------
     if(touchPoints.size() >= 2) {
         // max 2 touches.
-        return;
+        return true;
     }
     
     touchPoints.push_back(touchPointNew);
@@ -839,9 +855,11 @@ void ofxScrollView::touchDown(int x, int y, int id) {
         dragCancel();
         zoomDown(tmp, dist);
     }
+
+    return true;
 }
 
-void ofxScrollView::touchMoved(int x, int y, int id) {
+bool ofxScrollView::touchMoved(int x, int y, int id) {
     int touchIndex = -1;
     for(int i=0; i<touchPoints.size(); i++) {
         ofxScrollViewTouchPoint & touchPoint = touchPoints[i];
@@ -854,7 +872,7 @@ void ofxScrollView::touchMoved(int x, int y, int id) {
     }
     
     if(touchIndex == -1) {
-        return;
+        return false;
     }
     
     if(touchPoints.size() == 1) {
@@ -870,9 +888,11 @@ void ofxScrollView::touchMoved(int x, int y, int id) {
         
         zoomMoved(tmp, dist);
     }
+
+    return true;
 }
 
-void ofxScrollView::touchUp(int x, int y, int id) {
+bool ofxScrollView::touchUp(int x, int y, int id) {
     int touchIndex = -1;
     for(int i=0; i<touchPoints.size(); i++) {
         ofxScrollViewTouchPoint & touchPoint = touchPoints[i];
@@ -885,7 +905,7 @@ void ofxScrollView::touchUp(int x, int y, int id) {
     }
     
     if(touchIndex == -1) {
-        return;
+        return false;
     }
     
     if(touchPoints.size() == 1) {
@@ -903,16 +923,18 @@ void ofxScrollView::touchUp(int x, int y, int id) {
     }
     
     touchPoints.clear();
+
+    return true;
 }
 
-void ofxScrollView::touchDoubleTap(int x, int y, int id) {
+bool ofxScrollView::touchDoubleTap(int x, int y, int id) {
     if(bDoubleTapZoomEnabled == false) {
-        return;
+        return false;
     }
     
     bool bHit = windowRect.inside(x, y);
     if(bHit == false) {
-        return;
+        return false;
     }
     
     ofVec2f touchPoint(x, y);
@@ -932,8 +954,11 @@ void ofxScrollView::touchDoubleTap(int x, int y, int id) {
     zoomTimeSec *= doubleTapZoomIncrementTimeInSec;
     
     zoomTo(touchPoint, zoomTarget, zoomTimeSec);
+
+    return true;
 }
 
-void ofxScrollView::touchCancelled(int x, int y, int id) {
+bool ofxScrollView::touchCancelled(int x, int y, int id) {
     //
+    return false;
 }

@@ -7,6 +7,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxGuiGroup.h"
 
 //--------------------------------------------------------------
 class ofxScrollViewTouchPoint {
@@ -21,7 +22,7 @@ public:
 };
 
 //--------------------------------------------------------------
-class ofxScrollView {
+class ofxScrollView : public ofxGuiGroup {
     
 public:
     
@@ -119,7 +120,8 @@ public:
     //--------------------------------------------------------------
     virtual void begin();
     virtual void end();
-    virtual void draw();
+    virtual void generateDraw();
+//    virtual void draw();
     
     virtual void exit();
     
@@ -183,44 +185,44 @@ public:
     ofxScrollViewTouchPoint touchDownPointLast;
     
     //----------------------------------------------------------
-    virtual void mouseMoved(ofMouseEventArgs & mouse){
-        mouseMoved(mouse.x,mouse.y);
+    virtual bool mouseMoved(ofMouseEventArgs & mouse){
+        return mouseMoved(mouse.x,mouse.y);
     }
-    virtual void mouseDragged(ofMouseEventArgs & mouse){
-        mouseDragged(mouse.x,mouse.y,mouse.button);
+    virtual bool mouseDragged(ofMouseEventArgs & mouse){
+        return mouseDragged(mouse.x,mouse.y,mouse.button);
     }
-    virtual void mousePressed(ofMouseEventArgs & mouse){
-        mousePressed(mouse.x,mouse.y,mouse.button);
+    virtual bool mousePressed(ofMouseEventArgs & mouse){
+        return mousePressed(mouse.x,mouse.y,mouse.button);
     }
-    virtual void mouseReleased(ofMouseEventArgs & mouse){
-        mouseReleased(mouse.x,mouse.y,mouse.button);
+    virtual bool mouseReleased(ofMouseEventArgs & mouse){
+        return mouseReleased(mouse.x,mouse.y,mouse.button);
     }
     
-    virtual void mouseMoved(int x, int y);
-    virtual void mouseDragged(int x, int y, int button);
-    virtual void mousePressed(int x, int y, int button);
-    virtual void mouseReleased(int x, int y, int button);
+    virtual bool mouseMoved(int x, int y);
+    virtual bool mouseDragged(int x, int y, int button);
+    virtual bool mousePressed(int x, int y, int button);
+    virtual bool mouseReleased(int x, int y, int button);
     
     //----------------------------------------------------------
-	virtual void touchDown(ofTouchEventArgs &touch) {
-        touchDown(touch.x, touch.y, touch.id);
+    virtual bool touchDown(ofTouchEventArgs &touch) {
+        return touchDown(touch.x, touch.y, touch.id);
     }
-	virtual void touchMoved(ofTouchEventArgs &touch) {
-        touchMoved(touch.x, touch.y, touch.id);
+    virtual bool touchMoved(ofTouchEventArgs &touch) {
+        return touchMoved(touch.x, touch.y, touch.id);
     }
-	virtual void touchUp(ofTouchEventArgs &touch) {
-        touchUp(touch.x, touch.y, touch.id);
+    virtual bool touchUp(ofTouchEventArgs &touch) {
+        return touchUp(touch.x, touch.y, touch.id);
     }
-    virtual void touchDoubleTap(ofTouchEventArgs &touch) {
-        touchDoubleTap(touch.x, touch.y, touch.id);
+    virtual bool touchDoubleTap(ofTouchEventArgs &touch) {
+        return touchDoubleTap(touch.x, touch.y, touch.id);
     }
-    virtual void touchCancelled(ofTouchEventArgs &touch) {
-        touchCancelled(touch.x, touch.y, touch.id);
+    virtual bool touchCancelled(ofTouchEventArgs &touch) {
+        return touchCancelled(touch.x, touch.y, touch.id);
     }
     
-    virtual void touchDown(int x, int y, int id);
-    virtual void touchMoved(int x, int y, int id);
-    virtual void touchUp(int x, int y, int id);
-    virtual void touchDoubleTap(int x, int y, int id);
-    virtual void touchCancelled(int x, int y, int id);
+    virtual bool touchDown(int x, int y, int id);
+    virtual bool touchMoved(int x, int y, int id);
+    virtual bool touchUp(int x, int y, int id);
+    virtual bool touchDoubleTap(int x, int y, int id);
+    virtual bool touchCancelled(int x, int y, int id);
 };
