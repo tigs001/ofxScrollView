@@ -185,18 +185,18 @@ public:
     ofxScrollViewTouchPoint touchDownPointLast;
     
     //----------------------------------------------------------
-    virtual bool mouseMoved(ofMouseEventArgs & mouse){
-        return mouseMoved(mouse.x,mouse.y);
-    }
-    virtual bool mouseDragged(ofMouseEventArgs & mouse){
-        return mouseDragged(mouse.x,mouse.y,mouse.button);
-    }
-    virtual bool mousePressed(ofMouseEventArgs & mouse){
-        return mousePressed(mouse.x,mouse.y,mouse.button);
-    }
-    virtual bool mouseReleased(ofMouseEventArgs & mouse){
-        return mouseReleased(mouse.x,mouse.y,mouse.button);
-    }
+    virtual bool mouseMoved(ofMouseEventArgs & mouse);
+    virtual bool mouseDragged(ofMouseEventArgs & mouse);
+    virtual bool mousePressed(ofMouseEventArgs & mouse);
+    virtual bool mouseReleased(ofMouseEventArgs & mouse);
+
+    /**
+     * @brief mouseToLocalCoordinates() - Convert screen coordinates to local coordinates.
+     * @param ofMouseEventArgs * mouse - The original mouse event class.
+     * @param ofMouseEventArgs * localmouse - The adjusted mouse event class.
+     * @return ofMouseEventArgs & - An adjusted mouse event class.
+     */
+    virtual void mouseToLocalCoordinates(ofMouseEventArgs *mouse, ofMouseEventArgs *localmouse);
     
     virtual bool mouseMoved(int x, int y);
     virtual bool mouseDragged(int x, int y, int button);

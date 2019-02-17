@@ -767,10 +767,66 @@ void ofxScrollView::zoomCancel() {
 }
 
 //--------------------------------------------------------------
+bool ofxScrollView::mouseMoved(ofMouseEventArgs & mouse)
+{
+    /*
+     * Handle the mouseMoved event.
+     */
+    bool                bRetval;
+    ofMouseEventArgs    localmouse;
+
+    /*
+     * See if our parent class can handle the event
+     * first.  If it can, we are done.
+     * Convert the mouse coordinates to our ofxScrollView
+     * coordinates first.
+     */
+    mouseToLocalCoordinates(&mouse, &localmouse);
+    bRetval = ofxGuiGroup::mouseMoved(localmouse);
+    if (bRetval)
+        return bRetval;
+
+    /*
+     * Otherwise call our own handler using the original coordinates.
+     */
+    return mouseMoved(static_cast<int>(mouse.x), static_cast<int>(mouse.y));
+}
+
+
+
 bool ofxScrollView::mouseMoved(int x, int y) {
     //
     return false;
 }
+
+
+
+bool ofxScrollView::mousePressed(ofMouseEventArgs & mouse)
+{
+    /*
+     * Handle the mousePressed event.
+     */
+    bool bRetval;
+    ofMouseEventArgs    localmouse;
+
+    /*
+     * See if our parent class can handle the event
+     * first.  If it can, we are done.
+     * Convert the mouse coordinates to our ofxScrollView
+     * coordinates first.
+     */
+    mouseToLocalCoordinates(&mouse, &localmouse);
+    bRetval = ofxGuiGroup::mousePressed(localmouse);
+    if (bRetval)
+        return bRetval;
+
+    /*
+     * Otherwise call our own handler using the original coordinates.
+     */
+    return mousePressed(static_cast<int>(mouse.x), static_cast<int>(mouse.y), mouse.button);
+}
+
+
 
 bool ofxScrollView::mousePressed(int x, int y, int button) {
     bool bRetval;
@@ -788,13 +844,99 @@ bool ofxScrollView::mousePressed(int x, int y, int button) {
     return bRetval;
 }
 
+
+
+bool ofxScrollView::mouseDragged(ofMouseEventArgs & mouse)
+{
+    /*
+     * Handle the mouseDragged event
+     */
+    bool                bRetval;
+    ofMouseEventArgs    localmouse;
+
+    /*
+     * See if our parent class can handle the event
+     * first.  If it can, we are done.
+     * Convert the mouse coordinates to our ofxScrollView
+     * coordinates first.
+     */
+    mouseToLocalCoordinates(&mouse, &localmouse);
+    bRetval = ofxGuiGroup::mouseDragged(localmouse);
+    if (bRetval)
+        return bRetval;
+
+    /*
+     * Otherwise call our own handler using the original coordinates.
+     */
+    return mouseDragged(static_cast<int>(mouse.x), static_cast<int>(mouse.y), mouse.button);
+}
+
+
+
 bool ofxScrollView::mouseDragged(int x, int y, int button) {
     return touchMoved(x, y, button);
 }
 
+
+
+bool ofxScrollView::mouseReleased(ofMouseEventArgs & mouse)
+{
+    /*
+     * Handle the mouseReleased event.
+     */
+    bool                bRetval;
+    ofMouseEventArgs    localmouse;
+
+    /*
+     * See if our parent class can handle the event
+     * first.  If it can, we are done.
+     * Convert the mouse coordinates to our ofxScrollView
+     * coordinates first.
+     */
+    mouseToLocalCoordinates(&mouse, &localmouse);
+    bRetval = ofxGuiGroup::mouseReleased(localmouse);
+    if (bRetval)
+        return bRetval;
+
+    /*
+     * Otherwise call our own handler using the original coordinates.
+     */
+    return mouseReleased(static_cast<int>(mouse.x), static_cast<int>(mouse.y), mouse.button);
+}
+
+
+
 bool ofxScrollView::mouseReleased(int x, int y, int button) {
     return touchUp(x, y, button);
 }
+
+
+
+void ofxScrollView::mouseToLocalCoordinates(
+                        ofMouseEventArgs *mouse,
+                        ofMouseEventArgs *localmouse
+                    )
+{
+    /*
+     * Adjust the mouse events's x and y so they are
+     * in local coordinates instead of screen coorginates.
+     */
+
+    /*
+     * Take a copy of the current mouse event first.
+     */
+    *localmouse = *mouse;
+
+    /*
+     * Adjust the localmouse event by the top left of our
+     * scrollRectEased.  Any elements added to this
+     * ofxScrollView are all positioned relative to
+     * 0, 0.
+     */
+    localmouse->x -= scrollRectEased.x;
+    localmouse->y -= scrollRectEased.y;
+}
+
 
 //--------------------------------------------------------------
 bool ofxScrollView::touchDown(int x, int y, int id) {
